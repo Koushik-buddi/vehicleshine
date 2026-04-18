@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VehicleShine — Premium Wash & Detailing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════════════════ */
+    :root {
+      --gold:       #C9A44A;
+      --gold-light: #E8C870;
+      --gold-dim:   #8A6D2F;
+      --obsidian:   #080808;
+      --charcoal:   #111111;
+      --surface:    #181818;
+      --surface-2:  #222222;
+      --border:     #2a2a2a;
+      --border-gold:#3a2e18;
+      --text:       #F0ECE3;
+      --text-muted: #888880;
+      --text-dim:   #555550;
+      --white:      #FFFFFF;
+      --error:      #E05252;
+      --success:    #52A878;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --font-mono:    'DM Mono', monospace;
+
+      --radius-sm: 4px;
+      --radius:    10px;
+      --radius-lg: 18px;
+
+      --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --transition-fast: 0.15s ease;
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--obsidian);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+    a   { text-decoration: none; color: inherit; }
+    ul  { list-style: none; }
+
+    ::selection { background: var(--gold); color: var(--obsidian); }
+
+    ::-webkit-scrollbar              { width: 6px; }
+    ::-webkit-scrollbar-track        { background: var(--charcoal); }
+    ::-webkit-scrollbar-thumb        { background: var(--gold-dim); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover  { background: var(--gold); }
+
+    /* ═══════════════════════════════════════════════
+       TYPOGRAPHY
+    ═══════════════════════════════════════════════ */
+    .display { font-family: var(--font-display); }
+
+    h1,h2,h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.15; }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════
+       LAYOUT UTILITIES
+    ═══════════════════════════════════════════════ */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 100px 0; }
+
+    /* ═══════════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--obsidian);
+    }
+    .btn-gold:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(201,164,74,0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      background: rgba(201,164,74,0.06);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--text-dim); }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ═══════════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════════ */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      transition: var(--transition);
+      padding: 20px 0;
+    }
+    #navbar.scrolled {
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .nav-logo-main {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo-sub {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+      letter-spacing: 0.03em;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--text);
+      transition: var(--transition);
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--obsidian);
+      z-index: 999;
+      padding: 100px 24px 40px;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      transition: var(--transition-fast);
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,164,74,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,164,74,0.04) 0%, transparent 60%);
+    }
+
+    /* Grid lines decoration */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,164,74,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,164,74,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 75%);
+    }
+
+    /* Large decorative text */
+    .hero-deco {
+      position: absolute;
+      right: -2%;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-display);
+      font-size: clamp(120px, 18vw, 260px);
+      font-weight: 300;
+      font-style: italic;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,164,74,0.12);
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding-top: 100px;
+      max-width: 700px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      background: var(--gold);
+    }
+    .hero-eyebrow::before { width: 40px; }
+    .hero-eyebrow::after  { width: 20px; }
+
+    .hero-title {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 64px;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat {}
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-dim);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: scrollPulse 2.5s ease-in-out infinite;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+      50%       { opacity: 1;   transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ═══════════════════════════════════════════════
+       SERVICES SECTION
+    ═══════════════════════════════════════════════ */
+    #services {
+      background: var(--charcoal);
+      position: relative;
+    }
+    #services::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+
+    .services-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 32px;
+      margin-bottom: 52px;
+      flex-wrap: wrap;
+    }
+    .services-title { font-size: clamp(2.2rem, 4vw, 3.5rem); }
+
+    /* Vehicle type toggle */
+    .vehicle-toggle {
+      display: inline-flex;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      gap: 2px;
+    }
+    .vtab {
+      padding: 10px 24px;
+      border-radius: calc(var(--radius-sm) - 2px);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .vtab.active {
+      background: var(--gold);
+      color: var(--obsidian);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,164,74,0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .service-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+    .service-card:hover::before { opacity: 1; }
+
+    .service-badge {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: var(--gold);
+      color: var(--obsidian);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .service-name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .service-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      min-height: 56px;
+    }
+    .service-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .service-price {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .service-price span {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+    .service-duration {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+    }
+
+    /* ═══════════════════════════════════════════════
+       BOOKING SECTION
+    ═══════════════════════════════════════════════ */
+    #booking {
+      background: var(--obsidian);
+      position: relative;
+    }
+
+    .booking-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .booking-info {}
+    .booking-title { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 20px; }
+    .booking-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 48px;
+      font-weight: 300;
+    }
+
+    .booking-features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .booking-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .bf-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(201,164,74,0.1);
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .bf-text {}
+    .bf-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 2px; }
+    .bf-sub   { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* The form card */
+    .booking-card {
+      background: var(--charcoal);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .booking-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Steps indicator */
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+    .step-dot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      position: relative;
+    }
+    .step-dot:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      transition: background var(--transition);
+    }
+    .step-dot.completed:not(:last-child)::after { background: var(--gold); }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: var(--transition);
+      z-index: 1;
+      position: relative;
+    }
+    .step-dot.active   .step-circle { background: var(--gold); border-color: var(--gold); color: var(--obsidian); }
+    .step-dot.completed .step-circle { background: var(--gold-dim); border-color: var(--gold-dim); color: var(--obsidian); }
+
+    .step-label {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .step-dot.active    .step-label { color: var(--gold); }
+    .step-dot.completed .step-label { color: var(--text-muted); }
+
+    /* Form steps */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+
+    .form-step-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+    .form-step-sub {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    /* Form elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-family: var(--font-mono);
+    }
+    .form-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      transition: var(--transition-fast);
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 0 3px rgba(201,164,74,0.1);
+    }
+    .form-input::placeholder { color: var(--text-dim); }
+
+    /* Vehicle type & service selector cards */
+    .option-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .option-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+    .option-card:hover { border-color: var(--gold-dim); }
+    .option-card.selected {
+      border-color: var(--gold);
+      background: rgba(201,164,74,0.06);
+    }
+    .option-card-icon { font-size: 2rem; }
+    .option-card-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .option-card-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .option-card-price {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+
+    .service-select-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 340px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .service-select-grid::-webkit-scrollbar { width: 3px; }
+    .service-select-grid::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    .service-option {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .service-option:hover { border-color: var(--gold-dim); }
+    .service-option.selected { border-color: var(--gold); background: rgba(201,164,74,0.06); }
+    .service-option-info {}
+    .service-option-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+    .service-option-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .service-option-price {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--gold);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Time slot grid */
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .slot-btn {
+      padding: 12px 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      text-align: center;
+    }
+    .slot-btn:hover:not(.unavailable) { border-color: var(--gold-dim); }
+    .slot-btn.selected { border-color: var(--gold); background: rgba(201,164,74,0.1); color: var(--gold); }
+    .slot-btn.unavailable {
+      opacity: 0.35;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    /* Form row */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Step nav */
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    /* Error / success */
+    .form-error {
+      font-size: 0.8rem;
+      color: var(--error);
+      margin-top: 6px;
+      display: none;
+    }
+    .form-error.show { display: block; }
+
+    .alert {
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .alert.show { display: flex; align-items: flex-start; gap: 10px; }
+    .alert-error   { background: rgba(224,82,82,0.1);  border: 1px solid rgba(224,82,82,0.3);  color: #f87171; }
+    .alert-success { background: rgba(82,168,120,0.1); border: 1px solid rgba(82,168,120,0.3); color: #6ee7b7; }
+
+    /* Confirmation */
+    .confirmation {
+      text-align: center;
+      display: none;
+    }
+    .confirmation.show { display: block; }
+    .conf-check {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(82,168,120,0.12);
+      border: 1px solid rgba(82,168,120,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 24px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .conf-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .conf-sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+    .conf-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .conf-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+    .conf-row:last-child { border-bottom: none; }
+    .conf-row-label { color: var(--text-muted); }
+    .conf-row-val   { font-weight: 500; color: var(--text); }
+    .conf-id {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--gold);
+      background: rgba(201,164,74,0.08);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       WHY US SECTION
+    ═══════════════════════════════════════════════ */
+    #why {
+      background: var(--charcoal);
+      position: relative;
+      overflow: hidden;
+    }
+    #why::after {
+      content: 'EXCELLENCE';
+      position: absolute;
+      bottom: -40px;
+      right: -20px;
+      font-family: var(--font-display);
+      font-size: clamp(80px, 12vw, 180px);
+      font-weight: 300;
+      font-style: italic;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,164,74,0.06);
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .why-card {
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: var(--transition);
+    }
+    .why-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-4px);
+    }
+    .why-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 300;
+      color: rgba(201,164,74,0.2);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .why-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .why-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════ */
+    footer {
+      background: var(--obsidian);
+      border-top: 1px solid var(--border);
+      padding: 60px 0 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 64px;
+      margin-bottom: 60px;
+    }
+    .footer-brand p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      max-width: 300px;
+      margin-top: 16px;
+      line-height: 1.75;
+    }
+    .footer-heading {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-links a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       ADMIN OVERLAY
+    ═══════════════════════════════════════════════ */
+    #admin-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: var(--obsidian);
+      overflow-y: auto;
+    }
+    #admin-overlay.open { display: block; }
+
+    .admin-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--charcoal);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .admin-nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--gold);
+    }
+    .admin-nav-right { display: flex; gap: 12px; align-items: center; }
+
+    .admin-login {
+      max-width: 420px;
+      margin: 120px auto;
+      padding: 0 24px;
+    }
+    .admin-login-card {
+      background: var(--charcoal);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 44px;
+      text-align: center;
+    }
+    .admin-login-card h2 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .admin-login-card p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-bottom: 32px;
+    }
+
+    .admin-body { padding: 40px 32px; max-width: 1400px; margin: 0 auto; }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .stat-card {
+      background: var(--charcoal);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .stat-card-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-card-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Table */
+    .table-wrapper {
+      background: var(--charcoal);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .table-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+    }
+
+    .search-input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 14px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      outline: none;
+      width: 240px;
+      transition: var(--transition-fast);
+    }
+    .search-input:focus { border-color: var(--gold-dim); }
+    .search-input::placeholder { color: var(--text-dim); }
+
+    .bookings-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .bookings-table th {
+      padding: 12px 20px;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .bookings-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(42,42,42,0.5);
+      vertical-align: middle;
+    }
+    .bookings-table tr:last-child td { border-bottom: none; }
+    .bookings-table tr:hover td { background: rgba(201,164,74,0.02); }
+
+    .badge-vehicle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 2px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge-car   { background: rgba(82,130,200,0.15);  color: #7eb0f0; }
+    .badge-bike  { background: rgba(200,140,82,0.15);  color: #f0b870; }
+
+    .badge-status {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 2px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .status-confirmed { background: rgba(82,168,120,0.15); color: #6ee7b7; }
+
+    .delete-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: rgba(224,82,82,0.1);
+      border: 1px solid rgba(224,82,82,0.2);
+      color: #f87171;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+      font-size: 1rem;
+    }
+    .delete-btn:hover { background: rgba(224,82,82,0.2); }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--text-muted);
+    }
+    .empty-state-icon { font-size: 2.5rem; margin-bottom: 16px; opacity: 0.4; }
+    .empty-state-text { font-size: 0.875rem; }
+
+    /* Loading spinner */
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Confirm delete modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--charcoal);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .modal-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .modal h3 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+    .modal p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .modal-actions { display: flex; gap: 12px; justify-content: center; }
+
+    .btn-danger {
+      background: rgba(224,82,82,0.15);
+      color: #f87171;
+      border: 1px solid rgba(224,82,82,0.3);
+    }
+    .btn-danger:hover { background: rgba(224,82,82,0.25); }
+
+    /* Toast notification */
+    .toast-container {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 20px;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 260px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toast.out { animation: toastOut 0.25s ease forwards; }
+    @keyframes toastIn  { from { opacity: 0; transform: translateY(16px) scale(0.95); } }
+    @keyframes toastOut { to   { opacity: 0; transform: translateY(16px) scale(0.95); } }
+    .toast-success { border-color: rgba(82,168,120,0.4); }
+    .toast-error   { border-color: rgba(224,82,82,0.4);  }
+
+    /* ═══════════════════════════════════════════════
+       FADE-IN ANIMATIONS
+    ═══════════════════════════════════════════════ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 960px) {
+      .booking-layout { grid-template-columns: 1fr; gap: 48px; }
+      .footer-grid    { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .stats-row      { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .section          { padding: 72px 0; }
+      .nav-links        { display: none; }
+      .nav-cta .btn     { display: none; }
+      .hamburger        { display: flex; }
+      .hero-stats       { gap: 28px; flex-wrap: wrap; }
+      .services-header  { flex-direction: column; align-items: flex-start; }
+      .form-row         { grid-template-columns: 1fr; }
+      .booking-card     { padding: 28px 20px; }
+      .footer-grid      { grid-template-columns: 1fr; gap: 32px; }
+      .stats-row        { grid-template-columns: repeat(2, 1fr); }
+      .admin-body       { padding: 24px 16px; }
+      .admin-nav        { padding: 16px; }
+      .slot-grid        { grid-template-columns: repeat(2, 1fr); }
+      .bookings-table   { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+    @media (max-width: 480px) {
+      .option-grid  { grid-template-columns: 1fr 1fr; }
+      .stats-row    { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <span class="nav-logo-main">VehicleShine</span>
+        <span class="nav-logo-sub">Premium Wash & Detailing</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#hero"     class="active">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#booking" >Book Now</a></li>
+        <li><a href="#why"     >About</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <button class="btn btn-ghost"   onclick="openAdmin()">Admin Panel</button>
+        <a href="#booking" class="btn btn-gold">Book Now ↗</a>
+      </div>
+
+      <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero"     onclick="closeMobileMenu()">Home</a>
+  <a href="#services" onclick="closeMobileMenu()">Services</a>
+  <a href="#booking"  onclick="closeMobileMenu()">Book Now</a>
+  <a href="#why"      onclick="closeMobileMenu()">About</a>
+  <a href="#"         onclick="closeMobileMenu(); openAdmin();">Admin Panel</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-deco">Shine</div>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Premium Detailing Studio</div>
+
+      <h1 class="hero-title">
+        Your Vehicle<br>Deserves <em>Flawless</em><br>Perfection
+      </h1>
+
+      <p class="hero-sub">
+        Professional wash and detailing services for bikes and cars.
+        Precision care, premium products, and guaranteed results every time.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#booking" class="btn btn-gold" style="font-size:1rem; padding:16px 36px;">
+          Book a Service ↗
+        </a>
+        <a href="#services" class="btn btn-outline">
+          View Pricing
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">2,400+</div>
+          <div class="hero-stat-label">Vehicles Serviced</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">98%</div>
+          <div class="hero-stat-label">Satisfaction Rate</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">5★</div>
+          <div class="hero-stat-label">Average Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════════ -->
+<section id="services" class="section">
+  <div class="container">
+    <div class="services-header fade-up">
+      <div>
+        <div class="section-label">Our Services</div>
+        <h2 class="services-title display">Premium Care<br>for Every Vehicle</h2>
+      </div>
+      <div class="vehicle-toggle">
+        <button class="vtab active" onclick="switchTab('car')"  id="tab-car">🚗 Car</button>
+        <button class="vtab"        onclick="switchTab('bike')" id="tab-bike">🏍️ Bike</button>
+      </div>
+    </div>
+
+    <div class="services-grid fade-up" id="services-grid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BOOKING
+═══════════════════════════════════════════ -->
+<section id="booking" class="section">
+  <div class="container">
+    <div class="booking-layout">
+      <!-- Left info -->
+      <div class="booking-info fade-up">
+        <div class="section-label">Book Online</div>
+        <h2 class="booking-title display">Reserve Your<br><em>Slot Today</em></h2>
+        <p class="booking-desc">
+          Choose your vehicle, pick a service and select a convenient time.
+          We confirm instantly — no waiting, no fuss.
+        </p>
+
+        <div class="booking-features">
+          <div class="booking-feature">
+            <div class="bf-icon">⚡</div>
+            <div class="bf-text">
+              <div class="bf-title">Instant Confirmation</div>
+              <div class="bf-sub">Booking ID generated on the spot</div>
+            </div>
+          </div>
+          <div class="booking-feature">
+            <div class="bf-icon">🧴</div>
+            <div class="bf-text">
+              <div class="bf-title">Premium Products Only</div>
+              <div class="bf-sub">pH-neutral soaps, ceramic sealants</div>
+            </div>
+          </div>
+          <div class="booking-feature">
+            <div class="bf-icon">🛡️</div>
+            <div class="bf-text">
+              <div class="bf-title">100% Satisfaction Guarantee</div>
+              <div class="bf-sub">Free re-service if not satisfied</div>
+            </div>
+          </div>
+          <div class="booking-feature">
+            <div class="bf-icon">📅</div>
+            <div class="bf-text">
+              <div class="bf-title">Easy Rescheduling</div>
+              <div class="bf-sub">Call us up to 2 hours before slot</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right form card -->
+      <div class="booking-card fade-up">
+        <!-- Booking form -->
+        <div id="booking-form-wrapper">
+          <!-- Step progress -->
+          <div class="steps-bar" id="steps-bar">
+            <div class="step-dot active" data-step="1">
+              <div class="step-circle">1</div>
+              <div class="step-label">Vehicle</div>
+            </div>
+            <div class="step-dot" data-step="2">
+              <div class="step-circle">2</div>
+              <div class="step-label">Service</div>
+            </div>
+            <div class="step-dot" data-step="3">
+              <div class="step-circle">3</div>
+              <div class="step-label">Schedule</div>
+            </div>
+            <div class="step-dot" data-step="4">
+              <div class="step-circle">4</div>
+              <div class="step-label">Details</div>
+            </div>
+          </div>
+
+          <!-- Alert -->
+          <div class="alert alert-error" id="booking-alert"></div>
+
+          <!-- STEP 1 — Vehicle type -->
+          <div class="form-step active" id="step-1">
+            <div class="form-step-title display">Choose Vehicle</div>
+            <div class="form-step-sub">What are we taking care of today?</div>
+
+            <div class="option-grid">
+              <div class="option-card" onclick="selectVehicle('car')" id="opt-car">
+                <div class="option-card-icon">🚗</div>
+                <div class="option-card-name">Car</div>
+                <div class="option-card-desc">Hatchback, Sedan, SUV, MUV</div>
+              </div>
+              <div class="option-card" onclick="selectVehicle('bike')" id="opt-bike">
+                <div class="option-card-icon">🏍️</div>
+                <div class="option-card-name">Bike</div>
+                <div class="option-card-desc">Motorcycle, Scooter, Sports</div>
+              </div>
+            </div>
+
+            <div class="step-nav">
+              <span></span>
+              <button class="btn btn-gold" onclick="nextStep(2)">Continue →</button>
+            </div>
+          </div>
+
+          <!-- STEP 2 — Service selection -->
+          <div class="form-step" id="step-2">
+            <div class="form-step-title display">Pick a Service</div>
+            <div class="form-step-sub">Select the service that fits your needs.</div>
+
+            <div class="service-select-grid" id="service-select-grid">
+              <!-- Populated by JS -->
+            </div>
+
+            <div class="step-nav">
+              <button class="btn btn-ghost" onclick="prevStep(1)">← Back</button>
+              <button class="btn btn-gold"  onclick="nextStep(3)">Continue →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3 — Date & time -->
+          <div class="form-step" id="step-3">
+            <div class="form-step-title display">Pick Date & Time</div>
+            <div class="form-step-sub">Choose your preferred slot.</div>
+
+            <div class="form-group">
+              <label class="form-label" for="booking-date">Date</label>
+              <input type="date" class="form-input" id="booking-date" onchange="loadSlots()" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Available Slots</label>
+              <div class="slot-grid" id="slot-grid">
+                <div style="color:var(--text-dim); font-size:0.85rem; grid-column:1/-1; padding: 8px 0;">
+                  Select a date to view available slots.
+                </div>
+              </div>
+            </div>
+
+            <div class="step-nav">
+              <button class="btn btn-ghost" onclick="prevStep(2)">← Back</button>
+              <button class="btn btn-gold"  onclick="nextStep(4)">Continue →</button>
+            </div>
+          </div>
+
+          <!-- STEP 4 — Contact details -->
+          <div class="form-step" id="step-4">
+            <div class="form-step-title display">Your Details</div>
+            <div class="form-step-sub">Who should we expect?</div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cust-name">Full Name</label>
+                <input type="text" class="form-input" id="cust-name" placeholder="Arjun Sharma" />
+                <div class="form-error" id="err-name">Please enter your name.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cust-phone">Phone Number</label>
+                <input type="tel" class="form-input" id="cust-phone" placeholder="9876543210" maxlength="10" />
+                <div class="form-error" id="err-phone">Enter a valid 10-digit number.</div>
+              </div>
+            </div>
+
+            <!-- Summary card -->
+            <div class="conf-card" id="booking-summary" style="margin-bottom:20px;"></div>
+
+            <div class="step-nav">
+              <button class="btn btn-ghost"   onclick="prevStep(3)">← Back</button>
+              <button class="btn btn-gold"    id="submit-btn" onclick="submitBooking()">
+                Confirm Booking
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirmation screen -->
+        <div class="confirmation" id="confirmation-screen">
+          <div class="conf-check">✓</div>
+          <div class="conf-title display">Booking Confirmed!</div>
+          <div class="conf-sub">See you at the studio. We'll be ready for your vehicle.</div>
+          <div class="conf-card" id="conf-details"></div>
+          <button class="btn btn-outline" onclick="resetBooking()">
+            ↩ Book Another Service
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     WHY US
+═══════════════════════════════════════════ -->
+<section id="why" class="section">
+  <div class="container">
+    <div class="fade-up" style="max-width:560px">
+      <div class="section-label">Why Choose Us</div>
+      <h2 class="display" style="font-size: clamp(2.2rem, 4vw, 3.2rem);">
+        The Standard of Excellence in Vehicle Care
+      </h2>
+    </div>
+
+    <div class="why-grid fade-up">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <div class="why-title display">Expert Technicians</div>
+        <div class="why-desc">Our certified team of detailers brings years of experience and a passion for perfection to every vehicle.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">02</div>
+        <div class="why-title display">Premium Products</div>
+        <div class="why-desc">We use only professional-grade, pH-neutral soaps, ceramic coatings, and eco-friendly cleaning agents.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <div class="why-title display">Seamless Booking</div>
+        <div class="why-desc">Reserve your slot in under 2 minutes. Get instant confirmation and a booking ID right on your screen.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">04</div>
+        <div class="why-title display">Satisfaction Guarantee</div>
+        <div class="why-desc">Not 100% happy? We'll redo the service at no charge. Your satisfaction is our only standard.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <span class="nav-logo-main">VehicleShine</span>
+          <span class="nav-logo-sub">Premium Wash & Detailing</span>
+        </div>
+        <p>Professional vehicle wash and detailing services. Bringing out the brilliance in every vehicle, every time.</p>
+      </div>
+
+      <div>
+        <div class="footer-heading">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#services">Services & Pricing</a></li>
+          <li><a href="#booking">Book a Service</a></li>
+          <li><a href="#why">About Us</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-heading">Contact</div>
+        <ul class="footer-links">
+          <li><a href="#">📍 Koramangala, Bengaluru</a></li>
+          <li><a href="tel:+919876543210">📞 +91 98765 43210</a></li>
+          <li><a href="#">✉️ hello@vehicleshine.in</a></li>
+          <li><a href="#">🕐 Mon–Sat, 9 AM – 7 PM</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 VehicleShine. All rights reserved.</span>
+      <button class="btn btn-ghost" style="padding:8px 16px;font-size:0.78rem;" onclick="openAdmin()">
+        🔐 Admin Panel
+      </button>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     ADMIN OVERLAY
+═══════════════════════════════════════════ -->
+<div id="admin-overlay">
+  <nav class="admin-nav">
+    <div class="admin-nav-logo">VehicleShine — Admin</div>
+    <div class="admin-nav-right">
+      <span id="admin-status-text" style="font-size:0.8rem;color:var(--text-muted)"></span>
+      <button class="btn btn-ghost" id="admin-logout-btn" style="display:none" onclick="adminLogout()">Sign Out</button>
+      <button class="btn btn-ghost" onclick="closeAdmin()">✕ Close</button>
+    </div>
+  </nav>
+
+  <!-- Login form -->
+  <div class="admin-login" id="admin-login-section">
+    <div class="admin-login-card">
+      <div style="font-size:2.5rem;margin-bottom:16px">🔐</div>
+      <h2 class="display">Admin Access</h2>
+      <p>Enter the admin password to manage bookings.</p>
+      <div class="alert alert-error" id="admin-login-error"></div>
+      <div class="form-group" style="text-align:left">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="admin-password"
+          placeholder="Enter password"
+          onkeydown="if(event.key==='Enter') adminLogin()" />
+      </div>
+      <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:8px" onclick="adminLogin()">
+        Sign In →
+      </button>
+    </div>
+  </div>
+
+  <!-- Admin dashboard -->
+  <div class="admin-body" id="admin-dashboard" style="display:none">
+    <!-- Stats -->
+    <div class="stats-row" id="admin-stats">
+      <div class="stat-card"><div class="stat-card-num" id="s-total">—</div><div class="stat-card-label">Total Bookings</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-today">—</div><div class="stat-card-label">Today</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-cars">—</div><div class="stat-card-label">Cars</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-bikes">—</div><div class="stat-card-label">Bikes</div></div>
+      <div class="stat-card"><div class="stat-card-num" id="s-revenue">—</div><div class="stat-card-label">Revenue (₹)</div></div>
+    </div>
+
+    <!-- Bookings table -->
+    <div class="table-wrapper">
+      <div class="table-header">
+        <div class="table-title display">All Bookings</div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <input type="text" class="search-input" id="admin-search"
+            placeholder="Search name, phone, service…"
+            oninput="filterBookings()" />
+          <button class="btn btn-outline" onclick="loadAdminBookings()" style="padding:9px 16px;font-size:0.8rem;">
+            ↻ Refresh
+          </button>
+        </div>
+      </div>
+      <div id="bookings-table-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal-backdrop" id="delete-modal">
+  <div class="modal">
+    <div class="modal-icon">🗑️</div>
+    <h3 class="display">Delete Booking?</h3>
+    <p>This action cannot be undone. The booking will be permanently removed.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost"   onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger"  id="confirm-delete-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+  // ── State ──────────────────────────────────────────────────────────────────
+  const state = {
+    services: { bike: [], car: [] },
+    currentTab: 'car',        // services page tab
+    booking: {
+      vehicleType:  null,
+      serviceId:    null,
+      serviceName:  null,
+      servicePrice: null,
+      date:         null,
+      timeSlot:     null,
+    },
+    currentStep: 1,
+    adminToken:  localStorage.getItem('vs_admin_token') || null,
+    allBookings: [],
+    pendingDeleteId: null,
+  };
+
+  // ── Utilities ──────────────────────────────────────────────────────────────
+  const $ = (id) => document.getElementById(id);
+
+  function toast(msg, type = 'success') {
+    const container = $('toast-container');
+    const el = document.createElement('div');
+    el.className = `toast toast-${type}`;
+    el.innerHTML = `<span>${type === 'success' ? '✓' : '✕'}</span><span>${msg}</span>`;
+    container.appendChild(el);
+    setTimeout(() => {
+      el.classList.add('out');
+      setTimeout(() => el.remove(), 300);
+    }, 3500);
+  }
+
+  function formatCurrency(n) {
+    return '₹' + Number(n).toLocaleString('en-IN');
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '—';
+    const [y, m, d] = dateStr.split('-');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${d} ${months[parseInt(m,10)-1]} ${y}`;
+  }
+
+  function showAlert(id, msg, type = 'error') {
+    const el = $(id);
+    el.textContent = msg;
+    el.className = `alert alert-${type} show`;
+  }
+  function hideAlert(id) {
+    $(id).className = 'alert';
+  }
+
+  // ── Navbar scroll effect ──────────────────────────────────────────────────
+  window.addEventListener('scroll', () => {
+    $('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    // Update active nav link
+    const sections = ['hero','services','booking','why'];
+    let current = 'hero';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 120) current = id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
+    });
+  });
+
+  // ── Mobile menu ───────────────────────────────────────────────────────────
+  function toggleMobileMenu() {
+    const menu = $('mobileMenu');
+    const ham  = $('hamburger');
+    const open = menu.classList.toggle('open');
+    ham.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  function closeMobileMenu() {
+    $('mobileMenu').classList.remove('open');
+    $('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ── Fade-up observer ──────────────────────────────────────────────────────
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+  );
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── Fetch & render services ───────────────────────────────────────────────
+  async function fetchServices() {
+    try {
+      const res  = await fetch('/api/services');
+      const data = await res.json();
+      if (data.success) {
+        state.services = data.data;
+        renderServices(state.currentTab);
+      }
+    } catch (e) {
+      console.error('Failed to load services:', e);
+    }
+  }
+
+  function switchTab(type) {
+    state.currentTab = type;
+    $('tab-car').classList.toggle('active',  type === 'car');
+    $('tab-bike').classList.toggle('active', type === 'bike');
+    renderServices(type);
+  }
+
+  const SERVICE_ICONS = {
+    b1:'🚿', b2:'✨', b3:'⛓️', b4:'🏆',
+    c1:'🫧', c2:'🧹', c3:'♨️',  c4:'🔧', c5:'💎',
+  };
+
+  function renderServices(type) {
+    const grid = $('services-grid');
+    const list = state.services[type] || [];
+    grid.innerHTML = list.map(s => `
+      <div class="service-card">
+        ${s.badge ? `<div class="service-badge">${s.badge}</div>` : ''}
+        <div class="service-icon">${SERVICE_ICONS[s.id] || '🔷'}</div>
+        <div class="service-name">${s.name}</div>
+        <div class="service-desc">${s.description}</div>
+        <div class="service-footer">
+          <div class="service-price">${formatCurrency(s.price)}<span> / visit</span></div>
+          <div class="service-duration">${s.duration}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── Booking form logic ────────────────────────────────────────────────────
+
+  function updateStepBar(step) {
+    document.querySelectorAll('.step-dot').forEach(dot => {
+      const n = parseInt(dot.dataset.step);
+      dot.classList.remove('active','completed');
+      if (n === step)  dot.classList.add('active');
+      if (n < step)    dot.classList.add('completed');
+      // tick icon for completed
+      const circle = dot.querySelector('.step-circle');
+      circle.textContent = n < step ? '✓' : String(n);
+    });
+  }
+
+  function goToStep(step) {
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+    $(`step-${step}`).classList.add('active');
+    state.currentStep = step;
+    updateStepBar(step);
+    hideAlert('booking-alert');
+  }
+
+  function prevStep(n) { goToStep(n); }
+
+  function nextStep(n) {
+    hideAlert('booking-alert');
+
+    if (n === 2 && !state.booking.vehicleType) {
+      showAlert('booking-alert', 'Please select a vehicle type.'); return;
+    }
+    if (n === 3 && !state.booking.serviceId) {
+      showAlert('booking-alert', 'Please select a service.'); return;
+    }
+    if (n === 4) {
+      if (!state.booking.date) {
+        showAlert('booking-alert', 'Please select a date.'); return;
+      }
+      if (!state.booking.timeSlot) {
+        showAlert('booking-alert', 'Please select a time slot.'); return;
+      }
+      renderBookingSummary();
+    }
+    goToStep(n);
+  }
+
+  function selectVehicle(type) {
+    state.booking.vehicleType = type;
+    state.booking.serviceId   = null;
+    state.booking.serviceName = null;
+    state.booking.servicePrice= null;
+    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    $(`opt-${type}`).classList.add('selected');
+  }
+
+  function renderServiceOptions() {
+    const type = state.booking.vehicleType;
+    if (!type) return;
+    const grid = $('service-select-grid');
+    const list = state.services[type] || [];
+    grid.innerHTML = list.map(s => `
+      <div class="service-option ${state.booking.serviceId===s.id?'selected':''}"
+           onclick="selectService('${s.id}','${s.name.replace(/'/g, '\\\'')}',${s.price})">
+        <div class="service-option-info">
+          <div class="service-option-name">${SERVICE_ICONS[s.id]} ${s.name}</div>
+          <div class="service-option-meta">${s.duration} · ${s.description.substring(0,55)}…</div>
+        </div>
+        <div class="service-option-price">${formatCurrency(s.price)}</div>
+      </div>
+    `).join('');
+  }
+
+  function selectService(id, name, price) {
+    state.booking.serviceId    = id;
+    state.booking.serviceName  = name;
+    state.booking.servicePrice = price;
+    document.querySelectorAll('.service-option').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+  }
+
+  // Override nextStep for step 2 to render service options
+  const _origNext = nextStep;
+
+  // Set min date on date input
+  function initDateInput() {
+    const inp = $('booking-date');
+    const today = new Date().toISOString().split('T')[0];
+    inp.min   = today;
+    inp.value = today;
+  }
+
+  async function loadSlots() {
+    const date = $('booking-date').value;
+    if (!date) return;
+    state.booking.date     = date;
+    state.booking.timeSlot = null;
+    const grid = $('slot-grid');
+    grid.innerHTML = '<div class="spinner" style="margin:16px auto;"></div>';
+    try {
+      const res  = await fetch(`/api/slots?date=${date}`);
+      const data = await res.json();
+      if (!res.ok) { grid.innerHTML = `<div style="color:var(--error);font-size:.85rem">${data.error}</div>`; return; }
+      grid.innerHTML = data.slots.map(s => `
+        <button class="slot-btn ${s.available ? '' : 'unavailable'}"
+          onclick="${s.available ? `selectSlot('${s.slot}', this)` : ''}"
+          ${s.available ? '' : 'disabled'}>
+          ${s.slot}${s.available ? '' : '<br><span style="font-size:.65rem">Booked</span>'}
+        </button>
+      `).join('');
+    } catch {
+      grid.innerHTML = '<div style="color:var(--error);font-size:.85rem">Could not load slots.</div>';
+    }
+  }
+
+  function selectSlot(slot, el) {
+    state.booking.timeSlot = slot;
+    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function renderBookingSummary() {
+    const b = state.booking;
+    $('booking-summary').innerHTML = `
+      <div class="conf-row">
+        <span class="conf-row-label">Vehicle</span>
+        <span class="conf-row-val">${b.vehicleType === 'car' ? '🚗 Car' : '🏍️ Bike'}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Service</span>
+        <span class="conf-row-val">${b.serviceName}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Date</span>
+        <span class="conf-row-val">${formatDate(b.date)}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Time</span>
+        <span class="conf-row-val">${b.timeSlot}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Total</span>
+        <span class="conf-row-val" style="color:var(--gold);font-family:var(--font-display);font-size:1.1rem">${formatCurrency(b.servicePrice)}</span>
+      </div>
+    `;
+  }
+
+  function validateStep4() {
+    let valid = true;
+    const name  = $('cust-name').value.trim();
+    const phone = $('cust-phone').value.trim();
+
+    if (!name) {
+      $('err-name').classList.add('show'); valid = false;
+    } else {
+      $('err-name').classList.remove('show');
+    }
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+      $('err-phone').classList.add('show'); valid = false;
+    } else {
+      $('err-phone').classList.remove('show');
+    }
+    return valid;
+  }
+
+  async function submitBooking() {
+    if (!validateStep4()) return;
+
+    const btn = $('submit-btn');
+    btn.disabled   = true;
+    btn.textContent = 'Processing…';
+    hideAlert('booking-alert');
+
+    const payload = {
+      name:         $('cust-name').value.trim(),
+      phone:        $('cust-phone').value.trim(),
+      vehicleType:  state.booking.vehicleType,
+      serviceId:    state.booking.serviceId,
+      date:         state.booking.date,
+      timeSlot:     state.booking.timeSlot,
+    };
+
+    try {
+      const res  = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert('booking-alert', data.error || 'Booking failed. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Confirm Booking';
+        return;
+      }
+
+      // Show confirmation
+      showConfirmation(data.booking);
+
+    } catch {
+      showAlert('booking-alert', 'Network error. Please check your connection and try again.');
+      btn.disabled = false;
+      btn.textContent = 'Confirm Booking';
+    }
+  }
+
+  function showConfirmation(booking) {
+    $('booking-form-wrapper').style.display = 'none';
+    const screen = $('confirmation-screen');
+    screen.classList.add('show');
+
+    $('conf-details').innerHTML = `
+      <div class="conf-row">
+        <span class="conf-row-label">Booking ID</span>
+        <span class="conf-id">${booking.id.split('-')[0].toUpperCase()}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Name</span>
+        <span class="conf-row-val">${booking.name}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Vehicle</span>
+        <span class="conf-row-val">${booking.vehicleType === 'car' ? '🚗 Car' : '🏍️ Bike'}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Service</span>
+        <span class="conf-row-val">${booking.serviceName}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Date & Time</span>
+        <span class="conf-row-val">${formatDate(booking.date)} · ${booking.timeSlot}</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-row-label">Total Amount</span>
+        <span class="conf-row-val" style="color:var(--gold);font-family:var(--font-display);font-size:1.1rem">${formatCurrency(booking.servicePrice)}</span>
+      </div>
+    `;
+
+    toast('Booking confirmed! See you soon 🎉');
+  }
+
+  function resetBooking() {
+    state.booking = { vehicleType: null, serviceId: null, serviceName: null, servicePrice: null, date: null, timeSlot: null };
+    $('booking-form-wrapper').style.display = 'block';
+    $('confirmation-screen').classList.remove('show');
+    goToStep(1);
+    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    $('cust-name').value  = '';
+    $('cust-phone').value = '';
+    const submitBtn = $('submit-btn');
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Confirm Booking'; }
+    initDateInput();
+  }
+
+  // Override step transitions that need side effects
+  function nextStep(n) {
+    hideAlert('booking-alert');
+    if (n === 2) {
+      if (!state.booking.vehicleType) { showAlert('booking-alert', 'Please select a vehicle type.'); return; }
+      renderServiceOptions();
+    }
+    if (n === 3 && !state.booking.serviceId) {
+      showAlert('booking-alert', 'Please select a service.'); return;
+    }
+    if (n === 4) {
+      if (!state.booking.date)     { showAlert('booking-alert', 'Please select a date.'); return; }
+      if (!state.booking.timeSlot) { showAlert('booking-alert', 'Please select a time slot.'); return; }
+      renderBookingSummary();
+    }
+    goToStep(n);
+  }
+
+  // ── Admin panel ───────────────────────────────────────────────────────────
+  function openAdmin() {
+    $('admin-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (state.adminToken) {
+      showAdminDashboard();
+    } else {
+      $('admin-login-section').style.display  = 'block';
+      $('admin-dashboard').style.display      = 'none';
+    }
+    setTimeout(() => $('admin-password') && $('admin-password').focus(), 100);
+  }
+
+  function closeAdmin() {
+    $('admin-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function adminLogin() {
+    const pass = $('admin-password').value;
+    if (!pass) return;
+
+    hideAlert('admin-login-error');
+
+    try {
+      const res  = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) { showAlert('admin-login-error', data.error || 'Login failed.'); return; }
+
+      state.adminToken = data.token;
+      localStorage.setItem('vs_admin_token', data.token);
+      showAdminDashboard();
+
+    } catch {
+      showAlert('admin-login-error', 'Network error. Try again.');
+    }
+  }
+
+  function showAdminDashboard() {
+    $('admin-login-section').style.display   = 'none';
+    $('admin-dashboard').style.display       = 'block';
+    $('admin-logout-btn').style.display      = 'inline-flex';
+    $('admin-status-text').textContent        = 'Signed in';
+    loadAdminStats();
+    loadAdminBookings();
+  }
+
+  function adminLogout() {
+    state.adminToken = null;
+    localStorage.removeItem('vs_admin_token');
+    $('admin-login-section').style.display  = 'block';
+    $('admin-dashboard').style.display      = 'none';
+    $('admin-logout-btn').style.display     = 'none';
+    $('admin-status-text').textContent       = '';
+    $('admin-password').value               = '';
+  }
+
+  async function loadAdminStats() {
+    try {
+      const res  = await fetch('/api/admin/stats', { headers: { 'x-admin-token': state.adminToken } });
+      const data = await res.json();
+      if (res.status === 401) { adminLogout(); return; }
+      if (data.success) {
+        const s = data.stats;
+        $('s-total').textContent   = s.total;
+        $('s-today').textContent   = s.today;
+        $('s-cars').textContent    = s.cars;
+        $('s-bikes').textContent   = s.bikes;
+        $('s-revenue').textContent = formatCurrency(s.revenue).replace('₹','');
+      }
+    } catch {}
+  }
+
+  async function loadAdminBookings() {
+    const body = $('bookings-table-body');
+    body.innerHTML = '<div style="padding:32px;text-align:center"><div class="spinner"></div></div>';
+
+    try {
+      const res  = await fetch('/api/admin/bookings', { headers: { 'x-admin-token': state.adminToken } });
+      const data = await res.json();
+      if (res.status === 401) { adminLogout(); return; }
+      if (!data.success) { body.innerHTML = '<div style="padding:24px;color:var(--error)">Failed to load.</div>'; return; }
+
+      state.allBookings = data.data;
+      renderBookingsTable(state.allBookings);
+
+    } catch {
+      body.innerHTML = '<div style="padding:24px;color:var(--error)">Network error.</div>';
+    }
+  }
+
+  function renderBookingsTable(bookings) {
+    const body = $('bookings-table-body');
+    if (!bookings.length) {
+      body.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-text">No bookings found.</div>
+        </div>`;
+      return;
+    }
+    body.innerHTML = `
+      <table class="bookings-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Date</th>
+            <th>Slot</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${bookings.map((b, i) => `
+            <tr>
+              <td style="color:var(--text-dim);font-family:var(--font-mono);font-size:.75rem">${i+1}</td>
+              <td style="font-weight:500">${escHtml(b.name)}</td>
+              <td style="font-family:var(--font-mono);font-size:.82rem">${escHtml(b.phone)}</td>
+              <td><span class="badge-vehicle badge-${b.vehicleType}">${b.vehicleType==='car'?'🚗':'🏍️'} ${capitalize(b.vehicleType)}</span></td>
+              <td>${escHtml(b.serviceName)}</td>
+              <td style="font-size:.82rem;white-space:nowrap">${formatDate(b.date)}</td>
+              <td style="font-family:var(--font-mono);font-size:.78rem">${escHtml(b.timeSlot)}</td>
+              <td style="font-family:var(--font-display);color:var(--gold);font-size:1rem">${formatCurrency(b.servicePrice)}</td>
+              <td><span class="badge-status status-${b.status}">${capitalize(b.status)}</span></td>
+              <td>
+                <button class="delete-btn" onclick="promptDelete('${b.id}')" title="Delete booking">🗑</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  function filterBookings() {
+    const q = $('admin-search').value.toLowerCase().trim();
+    if (!q) { renderBookingsTable(state.allBookings); return; }
+    const filtered = state.allBookings.filter(b =>
+      b.name.toLowerCase().includes(q)       ||
+      b.phone.includes(q)                    ||
+      b.serviceName.toLowerCase().includes(q)||
+      b.vehicleType.toLowerCase().includes(q)||
+      b.date.includes(q)
+    );
+    renderBookingsTable(filtered);
+  }
+
+  function promptDelete(id) {
+    state.pendingDeleteId = id;
+    $('delete-modal').classList.add('open');
+    $('confirm-delete-btn').onclick = () => deleteBooking(id);
+  }
+  function closeDeleteModal() {
+    $('delete-modal').classList.remove('open');
+    state.pendingDeleteId = null;
+  }
+
+  async function deleteBooking(id) {
+    closeDeleteModal();
+    try {
+      const res = await fetch(`/api/admin/bookings/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-token': state.adminToken },
+      });
+      const data = await res.json();
+      if (res.status === 401) { adminLogout(); return; }
+      if (data.success) {
+        toast('Booking deleted successfully.');
+        loadAdminStats();
+        loadAdminBookings();
+      } else {
+        toast(data.error || 'Delete failed.', 'error');
+      }
+    } catch {
+      toast('Network error. Could not delete.', 'error');
+    }
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  // Close modal on backdrop click
+  $('delete-modal').addEventListener('click', (e) => {
+    if (e.target === $('delete-modal')) closeDeleteModal();
+  });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  (async function init() {
+    await fetchServices();
+    initDateInput();
+    // If already had token, keep it valid; check lazily
+    if (state.adminToken) {
+      // Validate token silently
+      fetch('/api/admin/stats', { headers: { 'x-admin-token': state.adminToken } })
+        .then(r => { if (r.status === 401) { state.adminToken = null; localStorage.removeItem('vs_admin_token'); } })
+        .catch(() => {});
+    }
+  })();
+</script>
+</body>
+</html>

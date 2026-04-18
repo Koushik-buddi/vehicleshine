@@ -1,0 +1,16 @@
+[
+  {
+    "id": "97b9ad02-d710-4b6d-b137-143aee5bae30",
+    "name": "BUDDI",
+    "phone": "8919254535",
+    "vehicleType": "car",
+    "serviceId": "c3",
+    "serviceName": "Steam Cleaning",
+    "servicePrice": 899,
+    "serviceDuration": "2.5 hrs",
+    "date": "2026-04-24",
+    "timeSlot": "10:00 AM",
+    "status": "confirmed",
+    "createdAt": "2026-04-18T10:47:48.654Z"
+  }
+]
